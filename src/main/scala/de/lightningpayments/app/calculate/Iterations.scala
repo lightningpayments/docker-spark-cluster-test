@@ -4,7 +4,7 @@ import de.commons.lib.spark.environments.SparkR.SparkEnvironment
 import org.apache.spark.sql.{Dataset, Encoder, Encoders}
 import zio.ZIO
 
-object PiIterations {
+object Iterations {
 
   case class Dummy(value: Int)
 

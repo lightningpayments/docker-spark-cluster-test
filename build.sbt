@@ -82,7 +82,7 @@ scapegoatDisabledInspections := Seq("VariableShadowing")
 coverageFailOnMinimum := true
 coverageHighlighting := true
 coverageMinimum := 100
-coverageExcludedPackages := """<empty>;..*Module.*;"""
+coverageExcludedPackages := """<empty>;..*Module.*;SimpleApp"""
 
 // -------------------------------------------------------------------------------------------------
 // Scalastyle Configuration (check style)
