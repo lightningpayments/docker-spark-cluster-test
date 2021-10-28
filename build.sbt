@@ -20,7 +20,19 @@ assemblyMergeStrategy in assembly := {
 // -------------------------------------------------------------------------------------------------
 // Scala compiler settings
 // -------------------------------------------------------------------------------------------------
-fork in Test := true // @see https://github.com/sbt/sbt/issues/3022
+lazy val root = project
+  .in(file("."))
+  .settings(commonSettings)
+  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git")))
+
+
+lazy val commonSettings = Seq(
+  envVars in Test :=
+    Map(
+      "SPARK_MASTER" -> "local[*]"
+    ),
+  fork in Test := true
+)
 scalacOptions in run ++= Seq(
   "-Dlog4j.debug=true",
   "-Dlog4j.configuration=log4j.properties"
@@ -41,7 +53,7 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // Publisher
 // -------------------------------------------------------------------------------------------------
 // credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-// resolvers += "Commons Spark Repository" at "http://135.181.45.135:8080/repository/internal"
+// resolvers += "Commons Spark Repository" at "https://github.com/lightningpayments/apache-spark-zio-commons/releases/tag/2.0.1"
 
 // -------------------------------------------------------------------------------------------------
 // Library dependencies
@@ -82,7 +94,7 @@ scapegoatDisabledInspections := Seq("VariableShadowing")
 coverageFailOnMinimum := true
 coverageHighlighting := true
 coverageMinimum := 100
-coverageExcludedPackages := """<empty>;..*Module.*;"""
+coverageExcludedPackages := """<empty>;..*Module.*"""
 
 // -------------------------------------------------------------------------------------------------
 // Scalastyle Configuration (check style)
