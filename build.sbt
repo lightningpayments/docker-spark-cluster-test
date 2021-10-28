@@ -20,9 +20,10 @@ assemblyMergeStrategy in assembly := {
 // -------------------------------------------------------------------------------------------------
 // Scala compiler settings
 // -------------------------------------------------------------------------------------------------
-lazy val global = project
+lazy val root = project
   .in(file("."))
   .settings(commonSettings)
+  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git")))
 
 
 lazy val commonSettings = Seq(
@@ -52,7 +53,7 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // Publisher
 // -------------------------------------------------------------------------------------------------
 // credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-// resolvers += "Commons Spark Repository" at "http://135.181.45.135:8080/repository/internal"
+// resolvers += "Commons Spark Repository" at "https://github.com/lightningpayments/apache-spark-zio-commons/releases/tag/2.0.1"
 
 // -------------------------------------------------------------------------------------------------
 // Library dependencies
