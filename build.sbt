@@ -20,7 +20,18 @@ assemblyMergeStrategy in assembly := {
 // -------------------------------------------------------------------------------------------------
 // Scala compiler settings
 // -------------------------------------------------------------------------------------------------
-fork in Test := true // @see https://github.com/sbt/sbt/issues/3022
+lazy val global = project
+  .in(file("."))
+  .settings(commonSettings)
+
+
+lazy val commonSettings = Seq(
+  envVars in Test :=
+    Map(
+      "SPARK_MASTER" -> "local[*]"
+    ),
+  fork in Test := true
+)
 scalacOptions in run ++= Seq(
   "-Dlog4j.debug=true",
   "-Dlog4j.configuration=log4j.properties"
@@ -82,7 +93,7 @@ scapegoatDisabledInspections := Seq("VariableShadowing")
 coverageFailOnMinimum := true
 coverageHighlighting := true
 coverageMinimum := 100
-coverageExcludedPackages := """<empty>;..*Module.*;SimpleApp"""
+coverageExcludedPackages := """<empty>;..*Module.*"""
 
 // -------------------------------------------------------------------------------------------------
 // Scalastyle Configuration (check style)
