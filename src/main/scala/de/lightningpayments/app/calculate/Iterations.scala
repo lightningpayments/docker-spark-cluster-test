@@ -6,7 +6,7 @@ import zio.ZIO
 
 object Iterations {
 
-  case class Dummy(value: Int)
+  final case class Dummy(value: Int) extends AnyVal
 
   object Dummy {
     implicit val encoder: Encoder[Dummy] = Encoders.product[Dummy]
