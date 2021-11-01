@@ -3,8 +3,8 @@
 ## Docker Apache Spark configuration app example.
 
 ```bash
-# load docker-deployment.sh
-bash docker-deployment.sh
+# load spark-app-docker-build.sh
+bash spark-app-docker-build.sh
 docker-compose -f spark-app-cluster-docker-compose-template.yml up
 ```
 
