@@ -1,12 +1,23 @@
-# SparkTestApp
+# Docker Deployment mit Apache Spark Scala App
 
-Docker Apache Spark configuration app example.
+## Docker Apache Spark configuration app example.
 
+```bash
+# load docker-deployment.sh
+bash docker-deployment.sh
+docker-compose -f spark-app-cluster-docker-compose-template.yml up
 ```
+
+```bash
+# alternative:
+
 # all dockerfiles in folder 'docker'
-# start example
+# start example for this example app
+>$: cd <application root path>
 >$: sbt clean assembly
->$: cd docker
->$: bash build-images.sh
->$: docker-compose -f spark-testapp-cluster-docker-compose.yml up -d
+>$: cp target/scala-2.12/DockerSparkTest-assembly-1.0.0.jar docker/DockerSparkTest-assembly-1.0.0.jar
+>$: cd docker/
+>$: bash build-images-template.sh DockerSparkTest-assembly-1.0.0.jar
+>$: docker-compose -f spark-app-cluster-docker-compose-template.yml up
 ```
+
