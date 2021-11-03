@@ -63,7 +63,7 @@ val sparkVers = "3.1.2"
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-jdbc" % "2.8.2",
   "log4j" % "log4j" % "1.2.17",
-  "de.commons" %% "commons-spark" % "2.0.1",
+  "de.commons" %% "commons-spark" % "2.0.2",
   "org.typelevel" %% "cats-core" % "2.6.1",
   "org.typelevel" %% "cats-effect" % "3.2.0",
   "dev.zio" %% "zio-interop-cats" % "2.1.4.0",
