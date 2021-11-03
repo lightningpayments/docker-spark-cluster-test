@@ -5,7 +5,7 @@ name := "DockerSparkTest"
 organization := "de.lightningpayments"
 organizationHomepage := Option(url("https://www.lightning-payments.de"))
 organizationName := "lightningpayments"
-version := "1.0.0"
+version := "2.0.0"
 
 // -------------------------------------------------------------------------------------------------
 // Application
@@ -53,7 +53,6 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // Publisher
 // -------------------------------------------------------------------------------------------------
 // credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-// resolvers += "Commons Spark Repository" at "https://github.com/lightningpayments/apache-spark-zio-commons/releases/tag/2.0.1"
 
 // -------------------------------------------------------------------------------------------------
 // Library dependencies
@@ -63,7 +62,7 @@ val sparkVers = "3.1.2"
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-jdbc" % "2.8.2",
   "log4j" % "log4j" % "1.2.17",
-  "de.commons" %% "commons-spark" % "2.0.2",
+  "de.lightningpayments" %% "commons-spark" % "3.0.0",
   "org.typelevel" %% "cats-core" % "2.6.1",
   "org.typelevel" %% "cats-effect" % "3.2.0",
   "dev.zio" %% "zio-interop-cats" % "2.1.4.0",
