@@ -57,21 +57,13 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // -------------------------------------------------------------------------------------------------
 // Library dependencies
 // -------------------------------------------------------------------------------------------------
-val sparkVers = "3.1.2"
-
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-jdbc" % "2.8.2",
   "log4j" % "log4j" % "1.2.17",
   "de.lightningpayments" %% "commons-spark" % "3.0.0",
-  "org.typelevel" %% "cats-core" % "2.6.1",
-  "org.typelevel" %% "cats-effect" % "3.2.0",
-  "dev.zio" %% "zio-interop-cats" % "2.1.4.0",
-  "dev.zio" %% "zio" % "1.0.1",
-  "org.apache.spark" %% "spark-core" % sparkVers % "compile",
-  "org.apache.spark" %% "spark-sql" % sparkVers % "compile",
-  "org.apache.hadoop" % "hadoop-common" % "3.2.0",
-  "mysql" % "mysql-connector-java" % "8.0.21",
-  "org.postgresql" % "postgresql" % "42.2.23",
+  "org.http4s" %% "http4s-blaze-server" % "0.23.6",
+  "org.http4s" %% "http4s-circe" % "0.23.6",
+  "org.http4s" %% "http4s-dsl" % "0.23.6",
   "com.h2database" % "h2" % "1.4.200" % "test",
   "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % "test",
   "org.mockito" % "mockito-inline" % "3.3.3" % "test",
