@@ -12,7 +12,7 @@ object Iterations {
     implicit val encoder: Encoder[Dummy] = Encoders.product[Dummy]
   }
 
-  def run: ZIO[SparkEnvironment, Throwable, Dataset[Dummy]] =
+  val run: ZIO[SparkEnvironment, Throwable, Dataset[Dummy]] =
     ZIO.environment[SparkEnvironment].flatMap(_.sparkM).map { spark =>
       import Dummy._
       import spark.implicits._

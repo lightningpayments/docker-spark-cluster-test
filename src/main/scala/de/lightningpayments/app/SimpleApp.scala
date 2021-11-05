@@ -3,33 +3,40 @@ package de.lightningpayments.app
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.Route
 import de.commons.lib.spark.SparkRunnable.SparkRZIO
 import de.commons.lib.spark.environments.SparkR.SparkEnvironment
 import de.lightningpayments.app.calculate.Iterations
-import zio._
 
-import scala.concurrent.Future
+import scala.io.StdIn
+import scala.util.{Failure, Success}
 
 // $COVERAGE-OFF$
-object SimpleApp extends zio.App with AppConfig {
+object SimpleApp extends AppConfig {
 
-  private val route: IO[Throwable, Unit] => Route = io =>
-    path("/") {
-      get {
-        onSuccess(runtime.unsafeRunToFuture(io))(complete(StatusCodes.Created))
-      }
-    }
+  private val host: String = configuration.get[String]("host")
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
-    Task.fromFuture { implicit ec =>
-      Future {
-        Http()
-          .newServerAt("10.5.0.6", 9000) // ip address from container
-          .bind(route(new SparkRZIO[SparkEnvironment, Any, Unit](io = Iterations.run.map(_.show)).run.provide(env)))
-          .flatMap(_.unbind())
-          .onComplete(_ => system.terminate())
+  private val io = new SparkRZIO[SparkEnvironment, Any, Unit](io = Iterations.run.map(_.show)).run
+
+  def main(args: Array[String]): Unit = {
+    import system.dispatcher
+
+    val future = Http()
+      .newServerAt(host, 9000) // ip address from container
+      .bind {
+        path("spark") {
+          println("FUCK")
+          onComplete(runtime.unsafeRunToFuture(io.provide(env))) {
+            case Success(_) => complete(StatusCodes.Created)
+            case Failure(_) => complete(StatusCodes.InternalServerError)
+          }
+        }
       }
-    }.exitCode
+
+    println("Server now online.")
+
+    StdIn.readLine()
+
+    future.flatMap(_.unbind()).onComplete(_ => system.terminate())
+  }
 }
 // $COVERAGE-ON$
