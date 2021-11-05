@@ -1,18 +1,28 @@
 package de.lightningpayments.app
 
-import com.typesafe.config.ConfigFactory
-import de.commons.lib.spark.SparkSessionLoader
-import org.apache.log4j.Logger
+import akka.actor.ActorSystem
+import com.typesafe.config.{Config, ConfigFactory}
+import de.commons.lib.spark.environments.SparkR.SparkEnvironment
+import org.apache.log4j.{Level, Logger}
 import play.api.Configuration
 
+// $COVERAGE-OFF$
 trait AppConfig {
 
-  protected implicit val logger: Logger = Logger.getLogger(this.getClass)
+  protected val runtime: zio.Runtime[zio.ZEnv] = zio.Runtime.global
 
-  protected implicit val configuration: Configuration = Configuration(ConfigFactory.load("application.conf"))
+  protected val config: Config = ConfigFactory.load("application.conf")
 
-  protected implicit val loader: SparkSessionLoader = new SparkSessionLoader(configuration)
+  protected implicit val system: ActorSystem = ActorSystem("simple-app-http-server", config)
+
+  private val logger: Logger = Logger.getLogger(this.getClass)
+  logger.setLevel(Level.ERROR)
+
+  private val configuration: Configuration = Configuration(config)
+
+  protected val env = new SparkEnvironment(configuration, logger)
 
   logger.info("spark master: " + configuration.get[String]("spark.master"))
 
 }
+// $COVERAGE-ON$

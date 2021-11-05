@@ -17,6 +17,8 @@ trait SparkTestSupport {
       |spark {
       |  config {}
       |}
+      |host = localhost
+      |akka {}
       |""".stripMargin))
 
   protected val appName: String = s"app_${UUID.randomUUID().toString}"
