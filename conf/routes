@@ -1,5 +1,1 @@
-
-
-
-
-GET /spark de.lightningpayments.app.SimpleApp.spark
+GET /spark                          de.lightningpayments.app.SimpleApp.spark

@@ -85,14 +85,15 @@ libraryDependencies ++= Seq(
   "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % "test",
   "org.mockito" % "mockito-inline" % "3.3.3" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test",
-  "org.scalatestplus" %% "scalacheck-1-14" % "3.2.0.0" % "test"
+  "org.scalatestplus" %% "scalacheck-1-14" % "3.2.0.0" % "test",
+  "de.leanovate.play-mockws" %% "play-mockws" % "2.8.0" % "test",
 )
 
 // -------------------------------------------------------------------------------------------------
 // Scapegoat Configuration (static code analysis)
 // -------------------------------------------------------------------------------------------------
 scapegoatConsoleOutput := true
-scapegoatIgnoredFiles := Seq.empty
+scapegoatIgnoredFiles := Seq(".*routes.main..*Routes.scala")
 scapegoatVersion in ThisBuild := "1.4.5"
 scapegoatDisabledInspections := Seq("VariableShadowing")
 
@@ -102,7 +103,7 @@ scapegoatDisabledInspections := Seq("VariableShadowing")
 coverageFailOnMinimum := true
 coverageHighlighting := true
 coverageMinimum := 100
-coverageExcludedPackages := """<empty>;..*Module.*"""
+coverageExcludedPackages := """<empty>;.*.Module;.*controllers\..*Reverse.*;router.Routes.*"""
 
 // -------------------------------------------------------------------------------------------------
 // Scalastyle Configuration (check style)

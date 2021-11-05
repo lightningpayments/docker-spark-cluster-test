@@ -6,5 +6,6 @@ class Module extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[SimpleApp]).asEagerSingleton()
+    bind(classOf[SparkService]).asEagerSingleton()
   }
 }

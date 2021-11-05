@@ -10,6 +10,7 @@ import org.scalatestplus.play.WsScalaTestClient
 import org.slf4j.LoggerFactory
 import zio.Task
 
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 import scala.language.higherKinds
 import scala.util.Try
 
@@ -32,6 +33,8 @@ class TestSpec
    * Note: Milliseconds
    */
   protected val futurePatienceInterval: Int = 20
+
+  implicit val ec: ExecutionContextExecutor = ExecutionContext.global
 
   /**
    * must be implemented to test functions outer spark scope
@@ -67,4 +70,3 @@ class TestSpec
     runtime.unsafeRun[Throwable, U](task.either.map(f))
 
 }
-
