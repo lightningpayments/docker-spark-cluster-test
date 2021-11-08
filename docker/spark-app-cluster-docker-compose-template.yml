@@ -75,7 +75,6 @@ services:
        - /mnt/spark-apps:/opt/spark-apps
        - /mnt/spark-data:/opt/spark-data
   test-app:
-    #image: spark-app-template:latest
     build:
       context: .
       dockerfile: spark-app-template.Dockerfile
