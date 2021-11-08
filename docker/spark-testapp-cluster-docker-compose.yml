@@ -67,7 +67,7 @@ services:
        - /mnt/spark-apps:/opt/spark-apps
        - /mnt/spark-data:/opt/spark-data
   test-app:
-    image: docker-spark-test-app:1.0.0
+    image: docker-spark-test-app:latest
     container_name: docker-spark-test-app
     hostname: docker-spark-test-app
     environment:
