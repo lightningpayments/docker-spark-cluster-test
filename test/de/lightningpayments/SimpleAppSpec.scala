@@ -5,7 +5,7 @@ import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import zio.IO
+import zio.Task
 
 class SimpleAppSpec extends TestSpec with SparkTestSupport {
 
@@ -14,10 +14,20 @@ class SimpleAppSpec extends TestSpec with SparkTestSupport {
       val service = mock[SparkService]
       val controller = new SimpleApp(stubControllerComponents(), service)
 
-      service.run returns IO.unit
+      service.run returns Task(3.14)
 
       val result = controller.spark.apply(FakeRequest())
-      status(result) mustBe NO_CONTENT
+      status(result) mustBe OK
+    }
+    "returns an error" in {
+      val service    = mock[SparkService]
+      val error      = new Throwable("error")
+      val controller = new SimpleApp(stubControllerComponents(), service)
+
+      service.run returns Task.fail(error)
+
+      val result = controller.spark.apply(FakeRequest())
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
   }
 

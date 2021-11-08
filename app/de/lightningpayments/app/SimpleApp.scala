@@ -15,6 +15,9 @@ final class SimpleApp @Inject()(
   private val runtime: zio.Runtime[zio.ZEnv] = zio.Runtime.global
 
   def spark: Action[AnyContent] = Action.async {
-    runtime.unsafeRunToFuture(sparkService.run).map(_ => NoContent)
+    runtime.unsafeRunToFuture(sparkService.run.either.map {
+      case Right(value) => Ok(value.toString)
+      case Left(ex)     => InternalServerError(ex.getMessage)
+    })
   }
 }
