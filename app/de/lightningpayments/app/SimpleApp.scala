@@ -21,9 +21,6 @@ final class SimpleApp @Inject()(
   private val program = new SparkRZIO[SparkEnvironment, RandomNumberEnv, Double](Iterations.run).run.provide(env)
 
   def spark: Action[AnyContent] = Action.async {
-    runtime.unsafeRunToFuture(program.either.map {
-      case Right(value) => Ok(value.toString)
-      case Left(ex)     => InternalServerError(ex.getMessage)
-    })
+    runtime.unsafeRunToFuture(program.map(value => Ok(value.toString)))
   }
 }

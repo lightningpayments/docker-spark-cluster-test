@@ -7,7 +7,9 @@ class IterationsSpec extends TestSpec with SparkTestSupport {
 
   "Iterations#run" must {
     "return a set of iterations as count" in withSparkSession { _ => logger =>
-      whenReady(Iterations.run.provide(new SparkEnvironment(configuration, logger)))(_.isRight mustBe true)
+      whenReady(Iterations.run.provide(new SparkEnvironment(configuration, logger) with RandomNumberEnv))(
+        _.isRight mustBe true
+      )
     }
   }
 
