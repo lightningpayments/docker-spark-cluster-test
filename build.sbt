@@ -79,7 +79,7 @@ val AkkaHttpVersion = "10.2.7"
 libraryDependencies ++= Seq(
   guice,
   "log4j" % "log4j" % "1.2.17",
-  "de.lightningpayments" %% "commons-spark" % "3.0.0",
+  "de.lightningpayments" %% "commons-spark" % "3.0.1",
   "org.typelevel" %% "cats-effect" % "3.2.8",
   "com.h2database" % "h2" % "1.4.200" % "test",
   "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % "test",

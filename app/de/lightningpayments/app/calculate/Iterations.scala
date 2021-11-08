@@ -1,22 +1,17 @@
 package de.lightningpayments.app.calculate
 
 import de.commons.lib.spark.environments.SparkR.SparkEnvironment
-import org.apache.spark.sql.{Dataset, Encoder, Encoders}
 import zio.ZIO
 
 object Iterations {
 
-  final case class Dummy(value: Int) extends AnyVal
-
-  object Dummy {
-    implicit val encoder: Encoder[Dummy] = Encoders.product[Dummy]
-  }
-
-  val run: ZIO[SparkEnvironment, Throwable, Dataset[Dummy]] =
+  val run: ZIO[SparkEnvironment, Throwable, Double] =
     ZIO.environment[SparkEnvironment].flatMap(_.sparkM).map { spark =>
-      import Dummy._
-      import spark.implicits._
-      spark.sparkContext.parallelize(1 to 10).toDS.as[Dummy]
-    }
+      spark.sparkContext.parallelize(1 to 100).filter { _ =>
+        val x = math.random
+        val y = math.random
+        x * x + y * y < 1
+      }.count()
+    }.map(count => 4.0 * count / 100)
 
 }

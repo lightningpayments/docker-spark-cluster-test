@@ -13,7 +13,9 @@ final class SparkService @Inject()(configuration: Configuration) {
 
   private val env = new SparkEnvironment(configuration, Logger.getLogger(this.getClass))
 
+  // scalastyle:off
   val run: IO[Throwable, Unit] =
-    new SparkRZIO[SparkEnvironment, Any, Unit](Iterations.run.map(_.show)).run.provide(env)
+    new SparkRZIO[SparkEnvironment, Any, Unit](Iterations.run.map(println)).run.provide(env)
+  // scalastyle:on
 
 }
