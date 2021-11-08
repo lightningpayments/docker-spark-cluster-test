@@ -1,6 +1,6 @@
 package de.lightningpayments
 
-import de.lightningpayments.app.{SimpleApp, SparkService}
+import de.lightningpayments.app.SimpleApp
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest

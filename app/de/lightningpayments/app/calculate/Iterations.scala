@@ -5,13 +5,18 @@ import zio.ZIO
 
 object Iterations {
 
-  val run: ZIO[SparkEnvironment, Throwable, Double] =
-    ZIO.environment[SparkEnvironment].flatMap(_.sparkM).map { spark =>
-      spark.sparkContext.parallelize(1 to 100).filter { _ =>
-        val x = math.random
-        val y = math.random
-        x * x + y * y < 1
-      }.count()
-    }.map(count => 4.0 * count / 100)
+  val run: ZIO[SparkEnvironment with RandomNumberEnv, Throwable, Double] =
+    for {
+      env        <- ZIO.environment[SparkEnvironment with RandomNumberEnv]
+      spark      <- env.sparkM
+      rangeTo    <- env.randomNIntGen(1000)
+      predicates  = spark.sparkContext.parallelize(1 to rangeTo).toLocalIterator.toList.map { _ =>
+        for {
+          (x, y)    <- ZIO.tupled(env.randomMathGen, env.randomMathGen)
+          predicate  = x * x + y * y < 1
+        } yield predicate
+      }
+      sequenced  <- ZIO.collectAll(predicates)
+    } yield 4.0 * sequenced.count(identity) / rangeTo
 
 }

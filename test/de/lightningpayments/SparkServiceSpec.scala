@@ -1,7 +1,5 @@
 package de.lightningpayments
 
-import de.lightningpayments.app.SparkService
-
 class SparkServiceSpec extends TestSpec with SparkTestSupport {
 
   "SparkService#run" must {
