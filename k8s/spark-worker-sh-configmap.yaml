@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  SPARK_DRIVER_MEMORY: 128m
+  SPARK_EXECUTOR_MEMORY: 256m
+  SPARK_MASTER: spark://spark-master:7077
+  SPARK_WORKER_CORES: "1"
+  SPARK_WORKER_MEMORY: 1G
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: spark-worker-1-spark-worker-sh
+  name: spark-worker-sh

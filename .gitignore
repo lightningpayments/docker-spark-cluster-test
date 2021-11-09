@@ -17,3 +17,4 @@ dist
 projectFilesBackup
 /spark-warehouse
 docker/*.jar
+k8s/*.jar

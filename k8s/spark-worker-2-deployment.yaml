@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.25.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: spark-worker-2
+  name: spark-worker-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: spark-worker-2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.25.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/spark-network: "true"
+        io.kompose.service: spark-worker-2
+    spec:
+      containers:
+        - env:
+            - name: SPARK_DRIVER_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: SPARK_DRIVER_MEMORY
+                  name: spark-worker-sh
+            - name: SPARK_EXECUTOR_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: SPARK_EXECUTOR_MEMORY
+                  name: spark-worker-sh
+            - name: SPARK_LOCAL_IP
+              value: spark-worker-2
+            - name: SPARK_MASTER
+              valueFrom:
+                configMapKeyRef:
+                  key: SPARK_MASTER
+                  name: spark-worker-sh
+            - name: SPARK_WORKER_CORES
+              valueFrom:
+                configMapKeyRef:
+                  key: SPARK_WORKER_CORES
+                  name: spark-worker-sh
+            - name: SPARK_WORKER_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: SPARK_WORKER_MEMORY
+                  name: spark-worker-sh
+          image: ronakkany/spark-worker:3.1.2
+          name: spark-worker-2
+          ports:
+            - containerPort: 8081
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/spark-apps
+              name: spark-worker-2-claim0
+            - mountPath: /opt/spark-data
+              name: spark-worker-2-claim1
+      hostname: spark-worker-2
+      restartPolicy: Always
+      volumes:
+        - name: spark-worker-2-claim0
+          persistentVolumeClaim:
+            claimName: spark-worker-2-claim0
+        - name: spark-worker-2-claim1
+          persistentVolumeClaim:
+            claimName: spark-worker-2-claim1
+status: {}

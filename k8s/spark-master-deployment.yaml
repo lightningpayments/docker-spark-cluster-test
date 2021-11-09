@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.25.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: spark-master
+  name: spark-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: spark-master
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.25.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/spark-network: "true"
+        io.kompose.service: spark-master
+    spec:
+      containers:
+        - env:
+            - name: SPARK_LOCAL_IP
+              value: spark-master
+          image: ronakkany/spark-master:3.1.2
+          name: spark-master
+          ports:
+            - containerPort: 8080
+            - containerPort: 7077
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/spark-apps
+              name: spark-master-claim0
+            - mountPath: /opt/spark-data
+              name: spark-master-claim1
+      hostname: spark-master
+      restartPolicy: Always
+      volumes:
+        - name: spark-master-claim0
+          persistentVolumeClaim:
+            claimName: spark-master-claim0
+        - name: spark-master-claim1
+          persistentVolumeClaim:
+            claimName: spark-master-claim1
+status: {}
