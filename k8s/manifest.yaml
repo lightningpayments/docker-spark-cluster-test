@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-master
+  labels:
+    app: spark
+    role: master
+spec:
+  selector:
+    app: spark
+    role: master
+  type: ClusterIP
+  ports:
+    - port: 7077
+      targetPort: 7077
+      protocol: TCP
+      name: rpc
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-master-expose
+  labels:
+    app: spark
+    role: master
+spec:
+  selector:
+    app: spark
+    role: master
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+---
+apiVersion: apps/v1
+kind: DeploymentList
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: spark-master-deployment
+      labels:
+        app: spark
+        role: master
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: spark
+          role: master
+      template:
+        metadata:
+          labels:
+            app: spark
+            role: master
+        spec:
+          restartPolicy: Always
+          enableServiceLinks: false
+          hostname: spark-master
+          containers:
+            - name: spark-master
+              image: spark-master:3.1.2
+              imagePullPolicy: Never
+              ports:
+                - containerPort: 8080
+                - containerPort: 7077
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: spark-worker-deployment
+      labels:
+        app: spark
+        role: worker
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: spark
+          role: worker
+      template:
+        metadata:
+          labels:
+            app: spark
+            role: worker
+        spec:
+          restartPolicy: Always
+          enableServiceLinks: false
+          containers:
+            - name: spark-worker
+              image: spark-worker:3.1.2
+              imagePullPolicy: Never
+              env:
+                - name: SPARK_MASTER_HOST
+                  value: "spark-master"
+                - name: SPARK_MASTER_PORT
+                  value: "7077"
