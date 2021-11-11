@@ -1,3 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-app
+  labels:
+    app: test-app
+    role: test-app
+spec:
+  selector:
+    app: test-app
+    role: test-app
+  type: LoadBalancer
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+      name: http
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -100,3 +119,33 @@ items:
                   value: "spark-master"
                 - name: SPARK_MASTER_PORT
                   value: "7077"
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: test-app-deployment
+      labels:
+        app: test-app
+        role: test-app
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: test-app
+          role: test-app
+      template:
+        metadata:
+          labels:
+            app: test-app
+            role: test-app
+        spec:
+          restartPolicy: Always
+          enableServiceLinks: false
+          containers:
+            - name: test-app
+              image: docker-spark-test-app:3.0.0
+              imagePullPolicy: Never
+              env:
+                - name: SPARK_MASTER
+                  value: "spark://spark-master:70777"
+                - name: PLAY_APPLICATION_SECRET
+                  value: "QCY?tAnfk?aZ?iwrNwnxIlR6CTf:G3gf:90Latabg@5241AB`R5W:1uDFN];Ik@n"
