@@ -10,6 +10,24 @@ spec:
   selector:
     app: test-app
     role: test-app
+  type: ClusterIP
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-app-expose
+  labels:
+    app: test-app
+    role: test-app
+spec:
+  selector:
+    app: test-app
+    role: test-app
   type: LoadBalancer
   ports:
     - port: 9000
@@ -97,7 +115,7 @@ items:
         app: spark
         role: worker
     spec:
-      replicas: 3
+      replicas: 1
       selector:
         matchLabels:
           app: spark
@@ -140,12 +158,13 @@ items:
         spec:
           restartPolicy: Always
           enableServiceLinks: false
+          hostname: test-app
           containers:
             - name: test-app
               image: docker-spark-test-app:3.0.0
               imagePullPolicy: Never
               env:
                 - name: SPARK_MASTER
-                  value: "spark://spark-master:70777"
+                  value: "spark://spark-master:7077"
                 - name: PLAY_APPLICATION_SECRET
                   value: "QCY?tAnfk?aZ?iwrNwnxIlR6CTf:G3gf:90Latabg@5241AB`R5W:1uDFN];Ik@n"
