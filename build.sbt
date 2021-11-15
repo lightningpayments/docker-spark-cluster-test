@@ -38,7 +38,7 @@ lazy val root = project
     PlayAkkaHttpServer
   )
   .settings(commonSettings)
-  // .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git")))
+  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git#1.1")))
 
 PlayKeys.devSettings += "play.server.provider" -> "play.core.server.NettyServerProvider"
 
