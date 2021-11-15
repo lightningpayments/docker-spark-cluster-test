@@ -38,7 +38,7 @@ lazy val root = project
     PlayAkkaHttpServer
   )
   .settings(commonSettings)
-  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git")))
+  // .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git")))
 
 PlayKeys.devSettings += "play.server.provider" -> "play.core.server.NettyServerProvider"
 
@@ -79,7 +79,7 @@ val AkkaHttpVersion = "10.2.7"
 libraryDependencies ++= Seq(
   guice,
   "log4j" % "log4j" % "1.2.17",
-  "de.lightningpayments" %% "commons-spark" % "3.0.1",
+  "de.lightningpayments" %% "commons-spark" % "1.1",
   "com.typesafe.play" %% "play-json" % "2.8.0",
   "org.typelevel" %% "cats-effect" % "3.2.8",
   "com.h2database" % "h2" % "1.4.200" % "test",

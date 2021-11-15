@@ -1,13 +1,13 @@
 package de.lightningpayments.app.calculate
 
-import de.commons.lib.spark.environments.SparkR.SparkEnvironment
+import de.commons.lib.spark.environments.SparkR
 import zio.ZIO
 
 object Iterations {
 
-  val run: ZIO[SparkEnvironment with RandomNumberEnv, Throwable, Double] =
+  val run: ZIO[SparkR with RandomNumberEnv, Throwable, Double] =
     for {
-      env        <- ZIO.environment[SparkEnvironment with RandomNumberEnv]
+      env        <- ZIO.environment[SparkR with RandomNumberEnv]
       spark      <- env.sparkM
       rangeTo    <- env.randomNIntGen(1000)
       predicates  = spark.sparkContext.parallelize(1 to rangeTo).toLocalIterator.toList.map { _ =>
