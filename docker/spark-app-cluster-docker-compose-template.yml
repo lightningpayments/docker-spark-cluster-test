@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"
       - "7077:7077"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.2
     volumes:
@@ -30,7 +30,7 @@ services:
     env_file: ./spark-worker.sh
     environment:
       - "SPARK_LOCAL_IP=spark-worker-1"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.3
     volumes:
@@ -49,7 +49,7 @@ services:
     env_file: ./spark-worker.sh
     environment:
       - "SPARK_LOCAL_IP=spark-worker-2"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.4
     volumes:
@@ -68,7 +68,7 @@ services:
     env_file: ./spark-worker.sh
     environment:
       - "SPARK_LOCAL_IP=spark-worker-3"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.5
     volumes:
