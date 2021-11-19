@@ -1,7 +1,7 @@
 package de.lightningpayments.app
 
-import de.commons.lib.spark.SparkRunnable.SparkRZIO
-import de.commons.lib.spark.environments.SparkR.SparkEnvironment
+import de.commons.lib.spark.SparkRunnable.RunnableSparkRT
+import de.commons.lib.spark.environments.SparkR
 import de.lightningpayments.app.calculate.{Iterations, RandomNumberEnv}
 import org.apache.log4j.Logger
 import play.api.Configuration
@@ -17,8 +17,8 @@ final class SimpleApp @Inject()(
 ) extends AbstractController(controllerComponents) {
 
   private val runtime: zio.Runtime[zio.ZEnv] = zio.Runtime.default
-  private val env = new SparkEnvironment(configuration, Logger.getLogger(this.getClass)) with RandomNumberEnv
-  private val program = new SparkRZIO[SparkEnvironment, RandomNumberEnv, Double](Iterations.run).run.provide(env)
+  private val env = new SparkR(configuration, Logger.getLogger(this.getClass)) with RandomNumberEnv
+  private val program = new RunnableSparkRT[SparkR with RandomNumberEnv, Double](Iterations.run).run.provide(env)
 
   def spark: Action[AnyContent] = Action.async {
     runtime.unsafeRunToFuture(program.map(value => Ok(value.toString)))
