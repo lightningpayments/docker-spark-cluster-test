@@ -1,4 +1,4 @@
-package de.lightningpayments.app.calculate
+package de.lightningpayments.app.iteration
 
 import de.commons.lib.spark.environments.SparkR
 import de.lightningpayments.{SparkTestSupport, TestSpec}

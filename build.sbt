@@ -28,25 +28,10 @@ assemblyMergeStrategy in assembly := {
 // -------------------------------------------------------------------------------------------------
 lazy val root = project
   .in(file("."))
-  .enablePlugins(
-    JDebPackaging,
-    PlayScala,
-    PlayNettyServer,
-    SystemdPlugin
-  )
-  .disablePlugins(
-    PlayAkkaHttpServer
-  )
   .settings(commonSettings)
-  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git#0.2.0")))
-
-PlayKeys.devSettings += "play.server.provider" -> "play.core.server.NettyServerProvider"
+  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git#0.4.0")))
 
 lazy val commonSettings = Seq(
-  // envVars in Test :=
-  //   Map(
-  //     "SPARK_MASTER" -> "local[*]"
-  //   ),
   fork in Test := true
 )
 scalacOptions in run ++= Seq(
@@ -77,17 +62,17 @@ val AkkaVersion = "2.6.5"
 val AkkaHttpVersion = "10.2.7"
 
 libraryDependencies ++= Seq(
-  guice,
   "log4j" % "log4j" % "1.2.17",
   "de.lightningpayments" %% "commons-spark" % "1.1",
   "com.typesafe.play" %% "play-json" % "2.8.0",
+  "io.scalac" %% "zio-akka-http-interop" % "0.4.0",
   "org.typelevel" %% "cats-effect" % "3.2.8",
   "com.h2database" % "h2" % "1.4.200" % "test",
   "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % "test",
   "org.mockito" % "mockito-inline" % "3.3.3" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test",
   "org.scalatestplus" %% "scalacheck-1-14" % "3.2.0.0" % "test",
-  "de.leanovate.play-mockws" %% "play-mockws" % "2.8.0" % "test",
+  "de.leanovate.play-mockws" %% "play-mockws" % "2.8.0" % "test"
 )
 
 // -------------------------------------------------------------------------------------------------
