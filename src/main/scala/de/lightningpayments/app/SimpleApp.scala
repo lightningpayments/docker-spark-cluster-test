@@ -10,11 +10,11 @@ object SimpleApp extends zio.App with RoutesAppSupport with ApiConfig { self =>
 
   override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = {
     val routesLayer       = ZLayer.succeed(self.getSparkRoute(program))
-    val allLayers         = actorSystemLayer ++ serverConfigLayer ++ routesLayer
     val httpServerManaged = HttpServer.start.provideLayer(HttpServer.live)
-    val managed           = httpServerManaged.provideLayer(allLayers)
+    val allLayers         = actorSystemLayer ++ serverConfigLayer ++ routesLayer
+    val managed           = httpServerManaged.provideLayer(allLayers).toLayer
 
-    ZIO.unit.fork.provideLayer(managed.toLayer).exitCode
+    ZIO.unit.fork.provideLayer(managed).exitCode
   }
 
   private val program: Task[Double] =
@@ -23,6 +23,5 @@ object SimpleApp extends zio.App with RoutesAppSupport with ApiConfig { self =>
       .>>=(_.sparkM)
       .>>=(Iterations.run)
       .provideLayer(randomNumberLayer)
-
 
 }
