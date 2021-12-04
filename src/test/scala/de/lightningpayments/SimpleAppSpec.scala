@@ -1,6 +1,5 @@
 package de.lightningpayments
 
-import de.lightningpayments.app.SimpleApp
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
