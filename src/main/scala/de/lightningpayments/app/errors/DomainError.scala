@@ -7,7 +7,9 @@ import play.api.Logging
 sealed trait DomainError
 
 object DomainError extends Logging {
+
   final case class FatalError(t: Throwable) extends DomainError
+
   final case object BadData                 extends DomainError
 
   implicit val domainErrorResponse: ErrorResponse[DomainError] = {
@@ -17,4 +19,5 @@ object DomainError extends Logging {
     case BadData =>
       HttpResponse(StatusCodes.BadRequest)
   }
+
 }

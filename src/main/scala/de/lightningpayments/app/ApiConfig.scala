@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import de.commons.lib.spark.services.Spark
 import de.lightningpayments.app.SimpleApp.program
-import de.lightningpayments.app.http.Routes
 import de.lightningpayments.app.iteration.RandomNumberEnv
 import de.lightningpayments.app.server.HttpServer
 import org.apache.log4j.{Logger => Log4jLogger}

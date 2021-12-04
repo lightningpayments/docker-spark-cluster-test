@@ -1,14 +1,11 @@
 package de.lightningpayments.app.iteration
 
-import de.commons.lib.spark.environments.SparkR
-import de.commons.lib.spark.services.Spark.HasSpark
-import de.commons.lib.spark.services.{Spark, SparkT}
 import org.apache.spark.sql.SparkSession
-import zio.{Has, RIO, ZIO}
+import zio.{Has, ZIO}
 
 object Iterations {
 
-  def run(spark: SparkSession) =
+  def run(spark: SparkSession): ZIO[Has[RandomNumberEnv], Throwable, Double] =
     for {
       rangeTo    <- ZIO.accessM[Has[RandomNumberEnv]](_.get.randomNIntGen(1000))
       predicates  = spark.sparkContext.parallelize(1 to rangeTo).toLocalIterator.toList.map { _ =>
