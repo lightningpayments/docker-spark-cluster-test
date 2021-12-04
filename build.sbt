@@ -14,8 +14,8 @@ version := "3.0.0"
 addCompilerPlugin("org.typelevel" % "kind-projector" % "0.13.0" cross CrossVersion.full)
 
 assemblyMergeStrategy in assembly := {
-  case PathList("javax", "servlet", xs @ _*) => MergeStrategy.first
-  case PathList(ps @ _*) if ps.last endsWith ".html" => MergeStrategy.first
+  case PathList("javax", "servlet", xs@_*) => MergeStrategy.first
+  case PathList(ps@_*) if ps.last endsWith ".html" => MergeStrategy.first
   case n if n.contains("services") => MergeStrategy.concat
   case n if n.startsWith("reference.conf") => MergeStrategy.concat
   case n if n.endsWith(".conf") => MergeStrategy.concat
@@ -58,14 +58,15 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // -------------------------------------------------------------------------------------------------
 // Library dependencies
 // -------------------------------------------------------------------------------------------------
-val AkkaVersion = "2.6.5"
-val AkkaHttpVersion = "10.2.7"
+val akkaVersion = "2.6.5"
+val akkaHttpVersion = "10.1.12"
 
 libraryDependencies ++= Seq(
   "log4j" % "log4j" % "1.2.17",
-  "de.lightningpayments" %% "commons-spark" % "1.1",
-  "com.typesafe.play" %% "play-json" % "2.8.0",
-  "io.scalac" %% "zio-akka-http-interop" % "0.4.0",
+  "com.typesafe.akka" %% "akka-actor" % akkaVersion % Provided,
+  "com.typesafe.akka" %% "akka-stream" % akkaVersion % Provided,
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion % Provided,
+  "io.scalac" %% "zio-akka-http-interop" % "0.1.0",
   "org.typelevel" %% "cats-effect" % "3.2.8",
   "com.h2database" % "h2" % "1.4.200" % "test",
   "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % "test",

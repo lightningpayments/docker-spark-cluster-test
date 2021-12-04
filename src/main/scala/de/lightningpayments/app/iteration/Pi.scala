@@ -3,7 +3,7 @@ package de.lightningpayments.app.iteration
 import org.apache.spark.sql.SparkSession
 import zio.{Has, ZIO}
 
-object Iterations {
+object Pi {
 
   def run(spark: SparkSession): ZIO[Has[RandomNumberEnv], Throwable, Double] =
     for {

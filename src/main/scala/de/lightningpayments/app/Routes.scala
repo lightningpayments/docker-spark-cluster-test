@@ -1,17 +1,17 @@
 package de.lightningpayments.app
 
-import cats.implicits._
 import akka.http.interop.ZIOSupport
-import akka.http.scaladsl.server.Directives.{complete, get, path}
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import cats.Show
+import cats.implicits._
 import de.lightningpayments.app.errors.DomainError
 import de.lightningpayments.app.errors.DomainError.FatalError
 import zio.{IO, Task}
 
-trait RoutesAppSupport extends ZIOSupport {
+trait Routes extends ZIOSupport {
 
-  def getSparkRoute[A: Show](program: => Task[A]): Route =
+  def getSparkRoute[A](program: => Task[A])(implicit show: Show[A]): Route =
     path("spark") {
       get {
         complete {
