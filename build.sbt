@@ -96,4 +96,4 @@ coverageExcludedPackages := """<empty>;.*.Module;.*controllers\..*Reverse.*;rout
 // -------------------------------------------------------------------------------------------------
 scalastyleFailOnError := true
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "conf"
+unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "resources"
