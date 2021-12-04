@@ -14,7 +14,7 @@ object SimpleApp extends zio.App with RoutesAppSupport with ApiConfig { self =>
     val httpServerManaged = HttpServer.start.provideLayer(HttpServer.live)
     val managed           = httpServerManaged.provideLayer(allLayers)
 
-    ZIO.unit.provideLayer(managed.toLayer).exitCode
+    ZIO.unit.fork.provideLayer(managed.toLayer).exitCode
   }
 
   private val program: Task[Double] =
