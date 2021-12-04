@@ -1,35 +1,28 @@
 package de.lightningpayments.app
 
-import akka.http.interop.ZIOSupport
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.Route
 import de.commons.lib.spark.services.Spark
-import de.lightningpayments.app.errors.DomainError
-import de.lightningpayments.app.errors.DomainError._
+import de.lightningpayments.app.http.Routes
 import de.lightningpayments.app.iteration.Iterations
-import zio.{IO, _}
+import de.lightningpayments.app.server.HttpServer
+import zio.NeedsEnv.needsEnvAmbiguous1
+import zio._
 
-object SimpleApp extends zio.App with ZIOSupport with ApiConfig {
+object SimpleApp extends zio.App with Routes with ApiConfig { self =>
 
   private val program: Task[Double] =
     sparkLayer
-      .provideLayer(Spark.live).>>=(_.sparkM).>>=(Iterations.run)
+      .provideLayer(Spark.live)
+      .>>=(_.sparkM)
+      .>>=(Iterations.run)
       .provideLayer(randomNumberLayer)
 
+  private val routesLayer = ZLayer.succeed(self.getSparkRoute(program))
+  private val allLayers   = actorSystemLayer ++ serverConfigLayer ++ routesLayer ++ HttpServer.live
+
   override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = {
-    val routes: Route =
-      path("spark") {
-        get {
-          complete {
-            program
-              .map(d => s"$d")
-              .flatMapError[Any, DomainError](t => IO.fail(FatalError(t)))
-          }
-        }
-      }
-
-
-    ???
+    val httpServerManaged = HttpServer.start.provideLayer(allLayers)
+    val httpServerLayer = ZLayer.fromManaged(httpServerManaged)
+    ZIO.never.provideLayer(httpServerLayer)
   }
 
 
