@@ -5,19 +5,21 @@ import zio.{Has, ZIO}
 
 object Pi {
 
-  def run(spark: SparkSession): ZIO[Has[RandomNumberEnv], Throwable, Double] =
-    for {
-      rangeTo    <- ZIO.accessM[Has[RandomNumberEnv]](_.get.randomNIntGen(1000))
-      predicates  = spark.sparkContext.parallelize(1 to rangeTo).toLocalIterator.toList.map { _ =>
-        for {
-          (x, y) <- ZIO.tupled(
-            ZIO.accessM[Has[RandomNumberEnv]](_.get.randomMathGen),
-            ZIO.accessM[Has[RandomNumberEnv]](_.get.randomMathGen)
-          )
-          predicate = x * x + y * y < 1
-        } yield predicate
-      }
-      sequenced <- ZIO.collectAll(predicates)
-    } yield 4.0 * sequenced.count(identity) / rangeTo
+  def run(spark: SparkSession): ZIO[Has[RandomNumberEnv], Throwable, Double] = {
+    println("PI")
+    ZIO.accessM[Has[RandomNumberEnv]](_.get.randomNIntGen(1000)).flatMap { to =>
+      val randomNumber = ZIO.accessM[Has[RandomNumberEnv]](_.get.randomMathGen)
+
+      ZIO
+        .collectAll {
+          spark.sparkContext.parallelize(1 to to).toLocalIterator.toList.map { _ =>
+            ZIO.tupled(randomNumber, randomNumber).map {
+              case (x, y) => x * x + y * y < 1
+            }
+          }
+        }
+        .map(seq => 4.0 * seq.count(identity) / to)
+    }
+  }
 
 }

@@ -7,15 +7,16 @@ import cats.Show
 import cats.implicits._
 import de.lightningpayments.app.errors.DomainError
 import de.lightningpayments.app.errors.DomainError.FatalError
+import org.apache.log4j.{Logger => Log4jLogger}
 import zio.{IO, Task}
 
 trait Routes extends ZIOSupport {
 
-  def getSparkRoute[A](program: => Task[A])(implicit show: Show[A]): Route =
+  def getSparkRoute[A: Show](io: => Task[A]): Route =
     path("spark") {
       get {
         complete {
-          program.map(_.show).foldM(t => IO.fail(FatalError(t)), IO.succeed(_)): IO[DomainError, String]
+          io.foldM(t => IO.fail(FatalError(t)), a => IO.succeed(a.show)): IO[DomainError, String]
         }
       }
     }

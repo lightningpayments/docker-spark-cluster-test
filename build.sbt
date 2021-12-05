@@ -29,7 +29,7 @@ assemblyMergeStrategy in assembly := {
 lazy val root = project
   .in(file("."))
   .settings(commonSettings)
-  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git#0.4.0")))
+  .dependsOn(RootProject(uri("https://github.com/lightningpayments/apache-spark-zio-commons.git#0.5.0")))
 
 lazy val commonSettings = Seq(
   fork in Test := true
