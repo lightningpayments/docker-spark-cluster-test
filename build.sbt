@@ -60,9 +60,14 @@ ThisBuild / scalacOptions += "-P:kind-projector:underscore-placeholders"
 // -------------------------------------------------------------------------------------------------
 val akkaVersion = "2.6.5"
 val akkaHttpVersion = "10.1.12"
+lazy val log4j = "log4j" % "log4j" % "1.2.17"
+lazy val slf4j = "org.slf4j" % "slf4j-api" % "1.7.16"
+lazy val slf4jLog4j = "org.slf4j" % "slf4j-log4j12" % "1.7.16"
 
 libraryDependencies ++= Seq(
-  "log4j" % "log4j" % "1.2.17",
+  log4j,
+  slf4jLog4j,
+  slf4j,
   "com.typesafe.akka" %% "akka-actor" % akkaVersion % Provided,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion % Provided,
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion % Provided,

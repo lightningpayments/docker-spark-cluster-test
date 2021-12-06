@@ -6,7 +6,6 @@ import zio.{Has, ZIO}
 object Pi {
 
   def run(spark: SparkSession): ZIO[Has[RandomNumberEnv], Throwable, Double] = {
-    println("PI")
     ZIO.accessM[Has[RandomNumberEnv]](_.get.randomNIntGen(1000)).flatMap { to =>
       val randomNumber = ZIO.accessM[Has[RandomNumberEnv]](_.get.randomMathGen)
 
